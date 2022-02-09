@@ -10,5 +10,5 @@ The project is created with:
 ## Features
 * Login to display Account
 * View transactions
-* Transfer monney to other accounts
+* Transfer money to other accounts in the Account Objects
 * Calculate balance, debit, income and interest
