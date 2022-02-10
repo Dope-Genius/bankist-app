@@ -62,10 +62,12 @@ const inputCloseUsername = document.querySelector('.form__input--user');
 const inputClosePin = document.querySelector('.form__input--pin');
 
 // Display Movements
-const displayFunctions = function (movements) {
+const displayFunctions = function (movements, sort = false) {
   containerMovements.innerHTML = "";
 
-  movements.forEach(function (mov, i) {
+  const movs = sort ? movements.slice().sort((a, b) => a-b) : movements;
+
+  movs.forEach(function (mov, i) {
     // type of movement
     const typeMove = mov > 0 ? 'deposit' : 'withdrawal'
 
@@ -172,12 +174,51 @@ btnTransfer.addEventListener('click', function(e){
     }
 });
 
+// Request Loann
+btnLoan.addEventListener('click', function(e){
+  e.preventDefault();
+
+  const amount = Number(inputLoanAmount.value)
+  if(amount > 0 && currentAccount.movements.some(mov => mov >= amount/10))
+  {
+    currentAccount.movements.push(amount)
+
+    updateUI(currentAccount)
+  }
+
+  inputLoanAmount.value = '';
+})
+
+// Close Account
+btnClose.addEventListener('click', function(e){
+  e.preventDefault();
+
+  if(inputCloseUsername.value === currentAccount.username 
+    && Number(inputClosePin.value) === currentAccount.pin)
+  {
+    // check for the index of the loged in user
+    const index = accounts.findIndex(acc => acc.username === currentAccount.username)
+
+    // console.log(index)
+
+    containerApp.style.opacity = 0;
+    // Remove user from the accounts array
+    accounts.splice(index, 1)
+  }
+
+  inputCloseUsername.value = inputClosePin.value = '';
+
+})
 
 
+let sorted = false;
 
-
-
-
+btnSort.addEventListener('click', function(e){
+  e.preventDefault();
+  console.log('working')
+  displayFunctions(currentAccount.movements, !sorted);
+  sorted = !sorted
+})
 
 
 
